@@ -1,94 +1,88 @@
-# 🎓 LearnWave - Modern Learning Management Platform
+# 🎓 LearnWave – AI-Powered Academic Social Platform
 
-A comprehensive, production-ready learning management system built with cutting-edge technologies, featuring AI-powered assistance (RAG PDF Question-Answering), voice navigation, and real-time collaboration.
+A comprehensive, production-ready learning management system built with Next.js, featuring AI-powered assistance, a full gamification engine, real-time community features, and peer leaderboards.
 
 ---
 
 ## ✨ Technology Stack
 
 ### 🎯 Core Framework
-- **⚡ Next.js 15** - The React framework for production with App Router (Full-Stack environment where frontend and backend coexist)
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+- **⚡ Next.js 16 (Turbopack)** – Full-stack React framework with App Router
+- **📘 TypeScript 5** – Type-safe development across frontend and backend
+- **🎨 Vanilla CSS + Tailwind utilities** – Custom design system with HSL-balanced tones
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark/light mode integration
-
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
-
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Axios** - Promise-based HTTP client
+### 🧩 UI & Components
+- **🧩 shadcn/ui** – Accessible components built on Radix UI
+- **🎯 Lucide React** – Consistent icon library
+- **🌈 Framer Motion** – Production-ready animations
 
 ### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation Node.js and TypeScript ORM
-- **PostgreSQL** - Production-ready relational database
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+- **🗄️ Prisma ORM** – Type-safe database access with PostgreSQL (Neon)
+- **🔐 Custom JWT Auth** – Cookie + Bearer token authentication
+- **🚦 Rate Limiting** – Per-IP request throttling on auth and voting endpoints
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
-
-### 🤖 AI Integration & Media
-- **🧠 Google Gemini AI** - Integrated AI assistant for academic help
-- **🗣️ Web Speech API** - Voice-based navigation and commands
-- **🎤 Web Audio API** - Audio capture and visualization (waveforms)
+### 🤖 AI Integration
+- **🧠 Google Gemini AI** – Academic assistant with RAG (PDF Q&A) support
+- **🗣️ Web Speech API** – Voice navigation and commands
 
 ---
 
-## 🏗️ Architecture Guide
+## 🏗️ Architecture
 
-LearnWave is a full-stack application where both frontend (UI/UX) and backend (API endpoints, database operations) coexist.
+LearnWave is a monolithic full-stack Next.js application. Frontend and API routes coexist in the same repo.
 
-### 📁 Detailed Folder Structure
+### 📁 Project Structure
 
 ```
 learnwave099/
 ├── src/
-│   ├── app/                    # Next.js App Router pages & API routes
-│   │   ├── page.tsx           # Homepage (/)
-│   │   ├── auth/              # Authentication pages (login/register)
-│   │   ├── student/           # Student dashboard & features
-│   │   ├── mentor/            # Mentor dashboard & features
-│   │   ├── admin/             # Admin dashboard & management
-│   │   └── api/               # Backend API routes
-│   │       ├── auth/          # Authentication endpoints (login/register)
-│   │       ├── student/       # Profile, dashboard, and settings APIs
-│   │       ├── mentor/        # Mentor settings, profile, and dashboard APIs
-│   │       ├── ai/            # Chat and RAG integration endpoints
-│   │       ├── uploads/       # Static file retrieval handlers
-│   │       └── ...
-│   ├── components/            # Reusable React components
-│   │   ├── ui/                # shadcn/ui components (buttons, input, etc.)
-│   │   ├── layout/            # Dashboard layout (sidebar, bottom-nav)
-│   │   └── ...
-│   ├── hooks/                 # Custom React hooks (speech recognition, etc.)
-│   └── lib/                   # Utility configurations (db connection, auth helper, Gemini config)
-├── prisma/                    # Database schema and migration files
-├── public/                    # Static assets (including user-uploaded avatars in uploads/avatars)
-└── uploads/                   # Stored PDFs/study resources
+│   ├── app/
+│   │   ├── page.tsx              # Landing page (/)
+│   │   ├── auth/                 # Login / Register pages
+│   │   ├── student/              # Student dashboard (SPA-style, all pages rendered client-side via ?page= param)
+│   │   ├── mentor/               # Mentor dashboard
+│   │   ├── admin/                # Admin dashboard
+│   │   └── api/                  # All backend API routes
+│   │       ├── auth/             # login, register, logout, me
+│   │       ├── student/          # profile, avatar, settings, community, quiz, dashboard
+│   │       ├── gamification/     # progress, leaderboard, achievements, missions, avatars
+│   │       ├── community/        # college-rankings
+│   │       ├── resources/        # list, upload, rate (voting), process (RAG)
+│   │       ├── ai/               # chat, rag-chat, summarize, explain, generate-quiz
+│   │       ├── messages/         # rooms, send, room detail
+│   │       ├── sessions/         # booking, cancel
+│   │       └── admin/            # analytics, users, mentor approval, settings
+│   ├── components/
+│   │   ├── student/              # Dashboard, Profile, Community, Settings, LevelPath, etc.
+│   │   ├── mentor/               # MentorDashboard, MentorSettings, etc.
+│   │   ├── admin/                # AdminDashboard, etc.
+│   │   └── ui/                   # shadcn base components
+│   ├── lib/
+│   │   ├── db.ts                 # Prisma client singleton (with model aliasing)
+│   │   ├── auth.ts               # JWT helpers (generateToken, verifyToken)
+│   │   ├── xp-engine.ts          # XP award, level-up, reward grant logic
+│   │   ├── xp-config.ts          # Level formula, MAX_LEVEL, xpForLevel
+│   │   └── streak-engine.ts      # Login streak tracking
+│   └── hooks/                    # useStudentProfile, useAuth, useVoice, etc.
+├── prisma/
+│   └── schema.prisma             # Full DB schema (users, gamification, community, etc.)
+├── tests/
+│   ├── api/smoke.test.ts         # API smoke tests (auth, XP, community post)
+│   └── lib/auth.test.ts          # JWT + password hashing unit tests
+└── .github/workflows/ci.yml      # CI: typecheck → test → production build
 ```
 
-### 🔄 Request Flow & Communication
+### 🔄 Request Flow
 ```
-[User Action in Frontend] 
+[User Action in UI]
      ↓
-[API Call (fetch/axios) to Next.js API Route]
+[API Call to /api/... route handler]
      ↓
-[Authentication/Role Check (JWT verification)]
+[JWT Auth check (cookie or Bearer header)]
      ↓
-[Database Query (Prisma Client)]
+[Prisma DB query on Neon PostgreSQL]
      ↓
-[JSON API Response]
-     ↓
-[Update React State / Display UI]
+[JSON Response → React State Update]
 ```
 
 ---
@@ -96,117 +90,169 @@ learnwave099/
 ## 🎨 Key Features
 
 ### 🎓 For Students
-- **📚 Dashboard** - Personalized learning dashboard with academic tracking.
-- **📚 RAG (PDF QA) AI Assistant** - Enable "Use Internal Resources" to ask questions and get answers cited page-by-page from uploaded PDF materials.
-- **📢 Announcements** - Real-time VTU announcements and updates.
-- **📖 Resources** - Download, filter, and view study notes, textbooks, and past papers.
-- **👁️ Inline PDF Viewer** - Click the "View" button to read PDFs directly in a beautiful embedded modal window.
-- **📚 Virtual Library** - Dedicated sidebar category to browse textbooks and reference materials.
-- **👨‍🏫 Find Mentors** - Browse, search, and book sessions with approved mentors.
-- **🗣️ Voice Navigation** - Navigate the entire dashboard via speech commands.
-- **👤 Profile Picture** - Upload and manage profile photos (persisted in DB).
+
+#### 📊 Dashboard & Profile
+- Personalized dashboard with academic overview
+- Profile card showing **level, XP badge, equipped title, and progress bar** (XP relative to next level threshold)
+- Avatar upload (Base64 DB fallback on serverless; local file on dev)
+- Equipped cosmetic **frame** rendered around the avatar
+
+#### 🏆 Gamification System
+- **XP Engine** – Earn XP for: Login (+10), Watch Video (+25), Forum Post (+10), Quiz Completed (+50), Quiz Score >90% (+30), Assignment Submitted (+80)
+- **Level Formula** – `level = floor(sqrt(xp / 100)) + 1`, capped at **Level 50**
+- **Level-Up Rewards** – Cosmetic frames (Bronze → Silver → Gold → Platinum → Diamond → Legendary) and milestone titles auto-granted on level-up
+- **Level Path** – Full visual roadmap of all 50 level rewards, showing locked/unlocked state
+- **Daily Caps** – Login XP capped at 1×/day, video watching at 5×/day, forum posts at 5×/day
+
+#### 🏅 Leaderboard & Rankings
+- **Global Leaderboard** – All-time top students by XP
+- **Monthly Leaderboard** – Monthly XP ranking
+- **Branch Leaderboard** – Peer ranking within enrolled branch
+- **Semester filter** – Filter any leaderboard by semester (1–8)
+- **College Rankings** – Aggregated college score rankings
+
+#### 🌐 Community
+- Social feed with post creation, likes, comments count
+- Hashtag tagging on posts
+- Study groups and campus events sidebar panels
+- XP awarded for every forum post created
+
+#### 📚 Resources
+- Browse, filter and download study notes and past papers
+- Inline PDF viewer (no download required)
+- **Resource Voting** – Thumbs up/down rating on each resource card, persisted in DB
+- Virtual Library tab for textbooks and reference materials
+
+#### 🤖 AI Assistant
+- Multi-provider AI chat (Gemini)
+- **RAG mode** – answers cited page-by-page from uploaded PDFs (toggle "Use Internal Resources")
+- Assignment help, concept explanation, and quiz generation
+
+#### ⚙️ Settings (Tabbed Layout)
+- **Profile Info** – Name, email, phone, university, college
+- **Customization** – Choose equipped cosmetic frame and title from unlocked items
+- **Security** – Change password
+- **Notifications** – Toggle system notifications
+- **UI Appearance** – Switch between Sidebar and Bottom Dock navigation layout
+
+#### 💬 Messaging
+- Real-time chat rooms by branch and year
+- Direct messages and session-linked rooms
 
 ### 👨‍🏫 For Mentors
-- **📊 Premium Dark Dashboard** - Live overview of bookings, students, ratings, and active hours with an interactive weekly contribution heatmap and engagement statistics charts.
-- **📅 Session Management** - Control availability and schedule timeslots.
-- **💰 Earnings Portal** - Analyze real-time transaction ledgers and daily payout distributions.
-- **📤 Parameter-Based Uploads** - Submit notes/books classified by VTU scheme, branch, semester, subject, and module.
-- **👤 Profile & Settings** - Manage professional bio, hourly rate, and profile picture.
+- **Premium Dark Dashboard** – Live stats: bookings, students, ratings, weekly contribution heatmap
+- **Session Management** – Manage availability and time slots
+- **Earnings Portal** – Transaction ledger and payout analytics
+- **Resource Uploads** – Submit notes classified by VTU scheme, branch, semester, subject, module
+- **Profile & Settings** – Bio, hourly rate, profile picture
 
 ### 👑 For Admins
-- **📊 Analytics Dashboard** - Real-time statistics on users, sessions, and revenue.
-- **👥 User Management** - Paginated directory of students, mentors, and admins with search/delete.
-- **✅ Mentor Approvals** - Dedicated interface to approve or reject pending mentor applications.
-- **📢 Announcement Editor** - Publish system-wide announcements with priority levels.
-- **📖 Resource Hub** - Upload study files or review and approve pending mentor submissions.
+- **Analytics Dashboard** – User counts, session stats, revenue
+- **User Management** – Paginated directory with search and delete
+- **Mentor Approvals** – Approve/reject pending mentor applications
+- **Announcement Editor** – Publish system-wide announcements with priority
+- **Resource Hub** – Upload and approve pending mentor submissions
+- **Platform Settings** – Maintenance mode toggles per role
 
 ---
 
-## 🚀 Quick Start & Installation
+## 🚀 Quick Start
 
-### Setup Dependencies & Start Dev Server
+### Install & Run
 ```bash
-# Install dependencies (utilizing legacy peer deps flag for package compatibility)
+# Install dependencies
 npm install --legacy-peer-deps
 
-# Run database generation
+# Generate Prisma client
 npx prisma generate
 
-# Run development server
+# Push schema to database
+npx prisma db push
+
+# Start dev server
 npm run dev
 ```
 
 ### Database Management
 ```bash
-# Push schema updates to DB
-npx prisma db push
-
-# Run migrations
-npx prisma migrate dev
-
-# Launch Prisma Studio to browse tables
-npx prisma studio
+npx prisma db push          # Sync schema to DB
+npx prisma migrate dev       # Create migration
+npx prisma studio            # Browse tables in browser
 ```
 
-### 🔐 Default Login Credentials (for testing)
+### Seed Cosmetics (Milestone Rewards)
+```bash
+npx tsx scripts/seed/seed-cosmetics.ts
+```
 
-- **Admin Account**: `admin@learnwave.com` | Password: `admin123`
-- **Student Account**: `student@test.com` | Password: `student123`
-- **Mentor Account**: `mentor@test.com` | Password: `mentor123`
+### 🔐 Test Credentials
+| Role    | Email                     | Password    |
+|---------|---------------------------|-------------|
+| Admin   | `admin@learnwave.com`     | `admin123`  |
+| Student | `student@test.com`        | `student123`|
+| Mentor  | `mentor@test.com`         | `mentor123` |
 
 ---
 
-## 🎤 Voice Navigation Commands
+## 🎤 Voice Navigation
 
 1. Toggle **"🎤 Voice Navigation"** in the sidebar.
-2. Speak one of the following commands clearly in English:
-   - **Student**: "home" / "dashboard", "announcements", "resources", "mentors", "ai assistant", "quiz".
-   - **Mentor**: "students", "sessions", "earnings", "profile", "settings".
-   - **Admin**: "users", "analytics", "announcements", "settings".
-3. The platform will read out audio confirmation and navigate to the page automatically.
+2. Speak commands in English:
+   - **Student**: `home`, `dashboard`, `announcements`, `resources`, `mentors`, `ai assistant`, `community`, `quiz`
+   - **Mentor**: `students`, `sessions`, `earnings`, `profile`, `settings`
+   - **Admin**: `users`, `analytics`, `announcements`, `settings`
 
 ---
 
-## 🤖 RAG (Retrieval-Augmented Generation) & PDF QA
+## 🤖 RAG – PDF Q&A
 
-RAG allows students to ask questions and receive AI answers compiled directly from uploaded study materials.
-
-### Setup and PDF processing
 1. Upload PDF notes in the Resource Hub.
-2. Run the script to extract and chunk the text:
+2. Process PDFs to extract chunks:
    ```bash
    npm run process-pdfs
    ```
-   *This extracts text page-by-page, divides it into ~500-token chunks, and saves them to `document_chunks` table.*
-3. Toggle **"Use Internal Resources"** on the AI Assistant page (`/ai-assistant`) to fetch cited answers.
-4. Verify resource status via:
-   ```bash
-   npx tsx scripts/check-resources.ts
-   ```
+3. Toggle **"Use Internal Resources"** on the AI Assistant page.
+4. Ask questions – answers are cited by source page.
 
-### API Endpoints for RAG
-- `POST /api/resources/process` - Processes a single PDF (`resourceId` in body).
-- `POST /api/ai/rag-chat` - Main RAG query endpoint (`question`, `useInternalResources` toggle, optional `subject` and `semester`).
+### Key RAG Endpoints
+- `POST /api/resources/process` – Process a PDF by `resourceId`
+- `POST /api/ai/rag-chat` – RAG query with optional `subject` and `semester` filters
 
 ---
 
-## 🎨 Design System & Aesthetics
+## 🚦 CI/CD Pipeline
 
-- **Student & Admin Dashboard**: Warm beige aesthetics with HSL-balanced tones (`Background: #FDFBF9`, `Sidebar/Dock: #F8F3EE`, `Borders: #E8DFD3`, `Buttons: #6B5844`).
-- **Mentor Dashboard**: Premium dark navy analytics layout styled after professional dashboard wireframes (gradient banner, stats metric distributions, github activity calendar, custom Recharts graphs, and glassmorphism detail matrices).
-- **Layout Modes**: Supports **Bottom Dock** navigation and classic **Side Sidebar** navigation. Toggleable under Settings.
-- **Glassmorphism**: Backdrop blur elements with semi-transparent card panels.
-- **Security Role Routing**: Next.js proxy guards are active to redirect unauthorized cross-role requests (e.g. students trying to access `/mentor` or `/admin`) back to the homepage login grid automatically.
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `main`:
+
+```
+npm ci → npx prisma generate → npx tsc --noEmit → npx vitest run → npx next build
+```
+
+All 8 tests pass including:
+- JWT auth token generation and verification
+- Password hashing
+- Login API smoke test
+- `/api/student/quiz/submit` XP award
+- `/api/student/community/post` XP award
 
 ---
 
-## 🆘 Support & Troubleshooting
+## 🎨 Design System
 
-- **Microphone Permission**: Allow browser microphone permissions for Voice Navigation. Works best in Chrome/Edge.
-- **AI Not Responding**: Check that your `GEMINI_API_KEY` is correctly defined in `.env.local`. Test with `npx tsx scripts/test-gemini.ts`.
-- **Reset Database**: If tables get out of sync, run `npx prisma migrate reset` to clean and reseed.
+- **Student / Admin**: Warm beige tones (`#FDFBF9` bg, `#6B5844` accent)
+- **Mentor**: Premium dark navy with glassmorphism and Recharts analytics
+- **Gamification UI**: Cyan XP badges, gold level indicators, gradient level path roadmap
+- **Layout Modes**: Bottom Dock or Side Sidebar (user-configurable in Settings)
+- **Animations**: Micro-transitions on tab switches, hover states, XP bar fill
 
+---
 
+## 🆘 Troubleshooting
 
-
-hii
+| Issue | Solution |
+|-------|----------|
+| Avatar shows broken image on Vercel | Expected for old `/uploads/` paths – new uploads auto-fallback to Base64 in DB |
+| Gemini AI not responding | Check `GEMINI_API_KEY` in `.env.local`. Test: `npx tsx scripts/test-gemini.ts` |
+| Microphone not working | Allow browser mic permissions; works best in Chrome/Edge |
+| DB tables out of sync | Run `npx prisma migrate reset` to clean and reseed |
+| `community_posts` undefined in tests | Ensure db mock includes `community_posts: { create: vi.fn() }` |
