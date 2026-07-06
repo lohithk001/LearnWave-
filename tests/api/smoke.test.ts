@@ -40,6 +40,10 @@ vi.mock('@/lib/db', () => {
       },
       user_mission_progress: {
         findMany: vi.fn(),
+      },
+      community_posts: {
+        create: vi.fn(),
+        findMany: vi.fn(),
       }
     }
   }
